@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+require 'okta-auth-proxy/cli'
+require 'benchmark'
+
+begin
+  etime = Benchmark.realtime { OktaAuthProxy::CLI.start(ARGV) }
+  $stderr.puts "Completed in #{etime}s"
+rescue Thor::UndefinedCommandError, Thor::UnknownArgumentError, Thor::AmbiguousCommandError, Thor::InvocationError => e
+  $stderr.puts(e.message)
+  exit(64)
+rescue Thor::Error => e
+  $stderr.puts(e.message)
+  exit(1)
+end

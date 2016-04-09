@@ -1,0 +1,5 @@
+require 'active_support/all'
+require 'okta-auth-proxy/version'
+require 'okta-auth-proxy/app'
+require 'okta-auth-proxy/auth'
+require 'okta-auth-proxy/server'

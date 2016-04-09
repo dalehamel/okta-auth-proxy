@@ -1,0 +1,43 @@
+# Wildcard SSL certificates;
+ssl_certificate     /etc/ssl/host.pem;
+ssl_certificate_key   /etc/ssl/host.key;
+
+# Redirect HTTP to HTTPS;
+server {
+  server_name _;
+  return 301 https://$host$request_uri;
+}
+
+# The PROXY;
+server {
+  # HTTP authentication backend;
+  set $auth_backend "http://127.0.0.1:3311";
+  listen 443 ssl;
+  server_name _;
+
+  # Proxy all the request to the backend;
+  location / {
+    proxy_cache off;
+    proxy_pass $auth_backend;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+  # The backend redirects the request to /reproxy;
+  location /reproxy {
+    # make this location internal-use only;
+    internal;
+
+    # set DNS;
+    # resolver 8.8.8.8; # is this even needed?
+
+    # set $reproxy variable to the value of X-Reproxy-URL header;
+    set $reproxy $upstream_http_x_reproxy_url;
+
+    # proxy request to the received X-Reproxy-URL value;
+    proxy_pass $reproxy;
+  }
+}
