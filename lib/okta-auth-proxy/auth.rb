@@ -27,7 +27,7 @@ module OktaAuthProxy
                                      domain: ENV['COOKIE_DOMAIN'] || 'localhost'
       app.use OmniAuth::Builder do
         provider :saml,
-        issuer:                             "http://localhost:3311",
+        issuer:                             ENV['SSO_ISSUER'],
         idp_sso_target_url:                 ENV['SSO_TARGET_URL'],
         idp_cert:                           File.read( ENV['CERT_PATH'] || 'okta_cert.pem'),
         name_identifier_format:             "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress",

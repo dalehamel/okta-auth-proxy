@@ -7,6 +7,7 @@ The idea is that you run this along-side an nginx instance, and it'll handle aut
 Set the following environment variables
 
 * SSO\_TARGET\_URL: the target url specified in okta
+* SSO\_ISSUER: the accepted audience in okta
 * PROXY\_TARGET: the address of the target application you are authing for
 * CERT\_PATH: Path to the certificate provided by Okta
 * COOKIE\_SECRET: a secure random secret for the cookie
@@ -20,6 +21,8 @@ The following variables are optional:
 
 * AUTH\_DOMAIN: the local address of this authentication app (change if not 'localhost')
 * DEBUG: set this to anything to debug logging
+
+**Note:** Ensure the protocol in okta matches the protocol of your app (http/https)
 
 ```bash
 export SSO_TARGET_URL=https://company.okta.com/app/company_project_1/hXk5d47tkNkB0x7/sso/saml
