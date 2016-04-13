@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'omniauth', ['=1.3.1']
   s.add_runtime_dependency 'omniauth-saml', ['=1.5.0']
   s.add_runtime_dependency 'em-synchrony', ['=1.0.4']
-  s.add_runtime_dependency 'thin', ['>= 1.6.4']
+  s.add_runtime_dependency 'thin', ['=1.6.4']
   s.add_runtime_dependency 'thor', ['>= 0.19.1']
   s.add_runtime_dependency 'activesupport', ['=4.2.5']
   s.add_development_dependency 'pry', ['=0.10.3']
