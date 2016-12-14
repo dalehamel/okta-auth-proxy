@@ -6,6 +6,8 @@ require 'securerandom'
 module OktaAuthProxy
   module OktaAuth
 
+    COOKIE_DOMAIN = ENV['COOKIE_DOMAIN'] || 'localhost'
+
     module AuthHelpers
       def protected!
         return if authorized?(request.host)
@@ -26,7 +28,7 @@ module OktaAuthProxy
 
       # Use a wildcard cookie to achieve single sign-on for all subdomains
       app.use Rack::Session::Cookie, secret: ENV['COOKIE_SECRET'] || SecureRandom.random_bytes(24),
-                                     domain: ENV['COOKIE_DOMAIN'] || 'localhost'
+                                     domain: COOKIE_DOMAIN
       app.use OmniAuth::Builder do
         provider :saml,
         issuer:                             ENV['SSO_ISSUER'],
