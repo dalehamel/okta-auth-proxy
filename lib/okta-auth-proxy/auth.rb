@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'omniauth'
 require 'omniauth-saml'
+require 'securerandom'
 
 module OktaAuthProxy
   module OktaAuth
@@ -22,8 +23,9 @@ module OktaAuthProxy
 
     def self.registered(app)
       app.helpers OktaAuthProxy::OktaAuth::AuthHelpers
+
       # Use a wildcard cookie to achieve single sign-on for all subdomains
-      app.use Rack::Session::Cookie, secret: ENV['COOKIE_SECRET'] || 'replaceme',
+      app.use Rack::Session::Cookie, secret: ENV['COOKIE_SECRET'] || SecureRandom.random_bytes(24),
                                      domain: ENV['COOKIE_DOMAIN'] || 'localhost'
       app.use OmniAuth::Builder do
         provider :saml,

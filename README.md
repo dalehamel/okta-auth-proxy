@@ -20,6 +20,7 @@ The proxy target should be set as an internal server in nginx, so that it can on
 The following variables are optional:
 
 * AUTH\_DOMAIN: the local address of this authentication app (change if not 'localhost')
+* COOKIE\_SECRET: a random secret will be generated at runtime if this is not set. If you need to avoid reauthenticating each time okta-auth-proxy is restarted for some reason, set this to a fixed value.
 * DEBUG: set this to anything to debug logging
 
 **Note:** Ensure the protocol in okta matches the protocol of your app (http/https)
