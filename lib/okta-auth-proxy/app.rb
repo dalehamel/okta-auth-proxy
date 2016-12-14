@@ -11,6 +11,8 @@ module OktaAuthProxy
       send verb, '/*' do
         pass if request.host == (ENV['AUTH_DOMAIN'] || 'localhost')
         pass if request.path == '/auth/saml/callback'
+        pass if request.path == '/auth/failure'
+
         protected!
         # If authorized, serve request
         if url = authorized?(request.host)
