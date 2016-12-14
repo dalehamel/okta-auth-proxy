@@ -36,7 +36,6 @@ module OktaAuthProxy
     def init_sighandlers
       trap(:INT)  { 'Got interrupt'; EM.stop; exit }
       trap(:TERM) { 'Got term';      EM.stop; exit }
-      trap(:KILL) { 'Got kill';      EM.stop; exit }
     end
   end
 end
