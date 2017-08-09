@@ -1,9 +1,17 @@
 require 'sinatra'
+require 'logger'
 require 'okta-auth-proxy/auth'
 
 module OktaAuthProxy
   class ProxyApp < Sinatra::Base
     register OktaAuthProxy::OktaAuth
+
+    def initialize
+      super
+      @logger =  Logger.new(STDOUT)
+      @logger.progname = 'okta-auth-proxy'
+      @logger
+    end
 
      # Block that is called back when authentication is successful
     [:get, :post, :put, :head, :delete, :options, :patch, :link, :unlink].each do |verb|
@@ -11,6 +19,13 @@ module OktaAuthProxy
       send verb, '/*' do
         pass if request.host == (ENV['AUTH_DOMAIN'] || 'localhost')
         pass if request.path == '/auth/saml/callback'
+        pass if request.path == '/auth/failure'
+
+        if request.host != OktaAuth::COOKIE_DOMAIN
+          @logger.warn "Request host (#{request.host}) and COOKIE_DOMAIN (#{OktaAuth::COOKIE_DOMAIN}) " +
+            "do not match. Cookies will not be set or readable. Check your COOKIE_DOMAIN value."
+        end
+
         protected!
         # If authorized, serve request
         if url = authorized?(request.host)
